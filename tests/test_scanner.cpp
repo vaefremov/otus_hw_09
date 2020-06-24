@@ -9,6 +9,9 @@
 
 namespace fs = boost::filesystem;
 
+namespace 
+{
+
 struct TestExecutor: public OTUS::IObserver
 {
     void update(OTUS::Event const& ev)
@@ -18,7 +21,7 @@ struct TestExecutor: public OTUS::IObserver
     std::vector<OTUS::Event> m_events;
 };
 
-static void create_test_filesystem()
+void create_test_filesystem()
 {
     fs::create_directories("sandbox/a/b/c");
     fs::create_directories("sandbox/a/b1");
@@ -28,14 +31,13 @@ static void create_test_filesystem()
     std::ofstream("sandbox/a/b1/file4.txt");
 }
 
-static void delete_test_filesystem()
+void delete_test_filesystem()
 {
     fs::remove_all("sandbox");
 }
 
 TEST(scanner, regular)
 {
-    create_test_filesystem();
     fs::path test_dir("sandbox");
     std::vector<fs::path> arg{test_dir};
     auto sc = OTUS::Scanner(arg);
@@ -43,16 +45,10 @@ TEST(scanner, regular)
     sc.subscribe(ex1_ptr);
     sc.run();
     ASSERT_EQ(5, ex1_ptr->m_events.size()); // 3 files and END_STREAM
-
-    for(auto& e: ex1_ptr->m_events)
-    {
-        std::cout << static_cast<int>(e.m_kind) << " " << e.m_filesize << " " << e.m_path << std::endl;
-    }
 }
 
 TEST(scanner, depth)
 {
-    create_test_filesystem();
     fs::path test_dir("sandbox");
     std::vector<fs::path> arg{test_dir};
     auto sc = OTUS::Scanner(arg);
@@ -61,16 +57,10 @@ TEST(scanner, depth)
     sc.subscribe(ex1_ptr);
     sc.run();
     ASSERT_EQ(3, ex1_ptr->m_events.size()); // 2 files and END_STREAM
-
-    for(auto& e: ex1_ptr->m_events)
-    {
-        std::cout << static_cast<int>(e.m_kind) << " " << e.m_filesize << " " << e.m_path << std::endl;
-    }
 }
 
 TEST(scanner, exclude_dir)
 {
-    create_test_filesystem();
     fs::path test_dir("sandbox");
     std::vector<fs::path> arg{test_dir};
     auto sc = OTUS::Scanner(arg);
@@ -80,16 +70,10 @@ TEST(scanner, exclude_dir)
     sc.subscribe(ex1_ptr);
     sc.run();
     ASSERT_EQ(4, ex1_ptr->m_events.size()); // 3 files and END_STREAM
-
-    for(auto& e: ex1_ptr->m_events)
-    {
-        std::cout << static_cast<int>(e.m_kind) << " " << e.m_filesize << " " << e.m_path << std::endl;
-    }
 }
 
 TEST(scanner, mask)
 {
-    create_test_filesystem();
     fs::path test_dir("sandbox");
     std::vector<fs::path> arg{test_dir};
     auto sc = OTUS::Scanner(arg);
@@ -98,12 +82,15 @@ TEST(scanner, mask)
     auto ex1_ptr = std::make_shared<TestExecutor>();
     sc.subscribe(ex1_ptr);
     sc.run();
-
-    for(auto& e: ex1_ptr->m_events)
-    {
-        std::cout << static_cast<int>(e.m_kind) << " " << e.m_filesize << " " << e.m_path << std::endl;
-    }
-
-    ASSERT_EQ(3, ex1_ptr->m_events.size()); // 3 files and END_STREAM
+    ASSERT_EQ(3, ex1_ptr->m_events.size()); // 2 files and END_STREAM
 }
 
+} // namespace
+
+int main(int argc, char **argv) {
+    create_test_filesystem();
+    ::testing::InitGoogleTest(&argc, argv);
+    auto res = RUN_ALL_TESTS();
+    delete_test_filesystem();
+    return res;
+}

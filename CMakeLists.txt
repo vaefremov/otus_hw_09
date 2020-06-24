@@ -47,7 +47,7 @@ target_link_libraries(test_scanner
     PRIVATE
     utilities
     ${GTEST_LIBRARIES}
-    ${GTEST_MAIN_LIBRARIES}
+    # ${GTEST_MAIN_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT}
     ${CONAN_LIBS}
 )
