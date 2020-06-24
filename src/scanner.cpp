@@ -25,23 +25,23 @@ void OTUS::Scanner::run()
 {
     for (auto root_dir: m_start_paths)
     {
-        fs::recursive_directory_iterator dir(root_dir), end;
-        while (dir != end)
+        fs::recursive_directory_iterator files_it(root_dir), end_it;
+        while (files_it != end_it)
         {
-            if(dir->status().type() == fs::directory_file && isDirExcluded(dir))
+            if(files_it->status().type() == fs::directory_file && isDirExcluded(files_it))
             {
-                dir.no_push();
-                dir++;
+                files_it.no_push();
+                files_it++;
                 continue;
             }
-            if(dir->status().type() == fs::regular_file && isFileOK(dir))
+            if(files_it->status().type() == fs::regular_file && isFileOK(files_it))
             {
-                notify(Event{EventKind::REGULAR_FILE, fs::file_size(dir->path()), dir->path()});
+                notify(Event{EventKind::REGULAR_FILE, fs::file_size(files_it->path()), files_it->path()});
             }
             
-            if(dir.depth() >= m_depth)
-                dir.no_push();
-            dir++;
+            if(files_it.depth() >= m_depth)
+                files_it.no_push();
+            files_it++;
         }
 
     }
