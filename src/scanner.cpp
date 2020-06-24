@@ -1,5 +1,6 @@
 #include "scanner.h"
 #include <regex>
+#include <iostream>
 
 namespace fs = boost::filesystem;
 
@@ -28,20 +29,32 @@ void OTUS::Scanner::run()
         fs::recursive_directory_iterator files_it(root_dir), end_it;
         while (files_it != end_it)
         {
+            if(m_verbose)
+                std::cerr << "Looking at " << files_it->path();
             if(files_it->status().type() == fs::directory_file && isDirExcluded(files_it))
             {
                 files_it.no_push();
                 files_it++;
+                if(m_verbose)
+                    std::cerr << " rejected" << std::endl;
                 continue;
             }
             if(files_it->status().type() == fs::regular_file && isFileOK(files_it))
             {
                 notify(Event{EventKind::REGULAR_FILE, fs::file_size(files_it->path()), files_it->path()});
+                if(m_verbose)
+                    std::cerr << " accepted";
             }
             
             if(files_it.depth() >= m_depth)
+            {
                 files_it.no_push();
+                if(m_verbose)
+                    std::cerr << " max depth reached";
+            }
             files_it++;
+            if(m_verbose)
+                std::cerr << std::endl;
         }
 
     }
