@@ -23,6 +23,6 @@ void OTUS::FilesComparator::update(Event const& ev)
 
 OTUS::FilesComparator::Report_t OTUS::FilesComparator::report() const
 {
-    std::cout << "Report!";
+    std::cout << "Report!" << std::endl;;
     return Report_t{};
 }
