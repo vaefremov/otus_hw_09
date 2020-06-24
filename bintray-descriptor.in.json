@@ -1,0 +1,25 @@
+{
+	"package": {
+		"name": "${CMAKE_PROJECT_NAME}",
+		"repo": "otus_hw",
+		"subject": "vaefremov",
+		"vcs_url": "https://github.com/vaefremov/otus_hw_07/",
+		"licenses": ["BSD"]
+	},
+	"version": {
+		"name": "${PROJECT_VERSION}"
+	},
+	"files": [
+		{
+			"includePattern": "${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}-${VERSION_NUMBER}-Linux.deb",
+			"uploadPattern": "${CMAKE_PROJECT_NAME}-${VERSION_NUMBER}-Linux.deb",
+			"matrixParams": {
+				"deb_distribution": "trusty",
+				"deb_component": "main",
+				"deb_architecture": "amd64"
+			}
+		}
+	],
+	"publish": true,
+	"override": false
+}
