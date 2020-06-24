@@ -46,7 +46,6 @@ std::vector<OTUS::Scanner::fspath> convert_paths(std::vector<std::string> arg)
 }
 
 int main(int argc, const char** argv) {
-    std::vector<std::string> empty{};
     po::options_description desc("Finding same files:");
     desc.add_options()
         ("help,h", "this help")
