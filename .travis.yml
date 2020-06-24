@@ -1,0 +1,35 @@
+language: cpp
+addons:
+  apt:
+    sources:
+    - sourceline: 'ppa:ubuntu-toolchain-r/test'
+    packages:
+    - libgtest-dev
+    - g++-8
+branches:
+  only:
+  - master
+before_script:
+- sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 90
+script:
+- mkdir gtest
+- cd gtest
+- cmake /usr/src/gtest/
+- cmake --build .
+- sudo cp *.a /usr/lib/
+- cd ..
+- mkdir build
+- cd build
+- cmake  -DCMAKE_BUILD_TYPE=Release ..
+- cmake --build .
+- cmake --build . --target test
+- cmake --build . --target package
+- cd ..
+deploy:
+  - provider: bintray
+    file: ./build/bintray-descriptor.json
+    user: vaefremov
+    key: $BINTRAY_API_KEY
+    skip_cleanup: true
+    on:
+      branch: master
