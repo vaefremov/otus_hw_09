@@ -23,7 +23,6 @@ class FileDescriptor
     {
         if(m_size != other.m_size)
         {
-            // std::cout << "sizes differ " << m_size << " " << other.m_size << std::endl;
             return false;
         }
         auto it_this = m_blocks.begin();
@@ -37,23 +36,30 @@ class FileDescriptor
             {
                 return false;
             }
-            // T bl_this = nextBlock(it_this, in_this);
-            // T bl_other = other.nextBlock(it_other, in_other);
             if(nextBlock(it_this, in_this) != other.nextBlock(it_other, in_other))
-            // if(bl_this != bl_other)
             {
-                // std::cout << "blocks differ " << bl_this << " " << bl_other <<  std::endl;
                 return false;
             }
-            // std::cout << "blocks same " << std::endl;
         }
         return !other.hasNextBlock(it_other);
     }
+    std::string const& filename()
+    {
+        return m_filename;
+    }
+
+    std::list<T> const& blocks() const
+    {
+        return m_blocks;
+    }
+
+    private:
+
     bool hasNextBlock(BlockListIterator_t& it) const
     {
         return (it != m_blocks.end()) || !isComplete();
     }
-    T nextBlock(BlockListIterator_t& it, std::ifstream& in)
+    T& nextBlock(BlockListIterator_t& it, std::ifstream& in)
     {
         if(it == m_blocks.end() && !isComplete())
         {
@@ -62,25 +68,18 @@ class FileDescriptor
             std::fill(buf, buf+m_blocksize, 0);
             if(!in.is_open())
             {
-                // std::cout << "opening " << m_filename << std::endl;
                 in.open(m_filename, std::ios::binary);
             }
             in.seekg(m_blocksize*m_blocks.size());
             in.read(buf, m_blocksize); // Process read error!
-            // std::cout << m_filename << " putting block" << buf << std::endl;
             T csum = calcChecksum<T>(m_blocksize, buf);
             m_blocks.emplace_back(csum);
             return m_blocks.back();
         }
         return *it++;
     }
-    std::string const& filename()
-    {
-        return m_filename;
-    }
 
-    private:
-    
+
     std::string m_filename;
     size_t m_size;
     size_t m_blocksize;
