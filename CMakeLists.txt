@@ -37,6 +37,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
     ${CONAN_LIBS}
 )
 
+
 add_executable(test_scanner tests/test_scanner.cpp)
 target_include_directories(test_scanner
     PRIVATE 
@@ -44,6 +45,21 @@ target_include_directories(test_scanner
     "${GTEST_INCLUDE_DIR}"
 )
 target_link_libraries(test_scanner
+    PRIVATE
+    utilities
+    ${GTEST_LIBRARIES}
+    # ${GTEST_MAIN_LIBRARIES}
+    ${CMAKE_THREAD_LIBS_INIT}
+    ${CONAN_LIBS}
+)
+
+add_executable(test_comparator tests/test_comparator.cpp)
+target_include_directories(test_comparator
+    PRIVATE 
+    "${CMAKE_HOME_DIRECTORY}/include"
+    "${GTEST_INCLUDE_DIR}"
+)
+target_link_libraries(test_comparator
     PRIVATE
     utilities
     ${GTEST_LIBRARIES}
