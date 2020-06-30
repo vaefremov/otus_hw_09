@@ -53,6 +53,19 @@ TEST(file_descriptor, diff_sizes)
     ASSERT_FALSE(fd4 == fd1);
 }
 
+TEST(file_descriptor, diff_checksums)
+{
+    size_t blocksize = 16;
+    std::string file1{"sandbox/file1.txt"};
+    OTUS::FileDescriptor<int32_t> fd1(blocksize, file1, 16);
+    OTUS::FileDescriptor<int32_t> fd2(blocksize, file1, 16);
+    ASSERT_EQ(0, fd1.blocks().size());
+    // Force descriptors to read files content
+    (void)(fd1 == fd2);
+    ASSERT_EQ(1, fd1.blocks().size());
+    ASSERT_EQ(10, fd1.blocks().front());
+}
+
 static void create_test_filesystem()
 {
     fs::create_directories("sandbox");
