@@ -91,7 +91,9 @@ else ()
 endif()
 
 enable_testing()
-# add_test(test_writer bin/test_writer)
+add_test(test_scanner bin/test_scanner)
+add_test(test_comparator bin/test_comparator)
+add_test(test_comparator_impl bin/test_comparator_impl)
 
 install(TARGETS ${CMAKE_PROJECT_NAME} RUNTIME DESTINATION bin)
 
