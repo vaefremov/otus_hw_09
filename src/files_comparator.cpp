@@ -1,6 +1,23 @@
-#include "files_comparator.h"
+#include "files_comparator_impl.h"
 
 #include <iostream>
+
+OTUS::FilesComparator::FilesComparator(size_t block_sz, HashKind hash_kind, bool is_verbose): 
+        m_block_sz(block_sz), m_hash_kind(hash_kind), m_verbose(is_verbose) 
+{
+    switch (hash_kind)
+    {
+    case HashKind::CRC32:
+        m_pimpl = std::make_unique<FilesComparatorImpl<unsigned int>>(m_block_sz);
+        break;
+    case HashKind::MD5:
+        m_pimpl = std::make_unique<FilesComparatorImpl<md5digest_t>>(m_block_sz);
+        break;
+    default:
+        throw   std::invalid_argument("Unknown checksum type");
+    }
+}
+
 
 OTUS::HashKind OTUS::hash_name_from_string(std::string hash_name)
 {

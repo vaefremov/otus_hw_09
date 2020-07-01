@@ -6,6 +6,8 @@
 #include "iobserver.h"
 #include "scanner.h"
 
+#include <iostream> // @TODO: remove later
+
 namespace OTUS
 {
 
@@ -15,6 +17,18 @@ enum class HashKind
 };
 
 HashKind hash_name_from_string(std::string hash_name);
+
+class IFilesComparatorImpl
+{
+    public:
+
+    using Duplicates_t = std::map<std::string, std::list<std::string>>;
+    
+    virtual ~IFilesComparatorImpl() = default;
+    virtual void add(std::string path, size_t fs) = 0;
+    virtual Duplicates_t const& duplicates() = 0;
+};
+
 
 class FilesComparator: public IObserver
 {
@@ -29,8 +43,7 @@ class FilesComparator: public IObserver
         return ptr;
     }
     FilesComparator() = delete;
-    FilesComparator(size_t block_sz, HashKind hash_kind, bool is_verbose): 
-        m_block_sz(block_sz), m_hash_kind(hash_kind), m_verbose(is_verbose) {};
+    FilesComparator(size_t block_sz, HashKind hash_kind, bool is_verbose);
 
     void update(Event const& ev) override;
     Report_t report() const;
@@ -39,6 +52,7 @@ class FilesComparator: public IObserver
     size_t m_block_sz;
     HashKind m_hash_kind;
     bool m_verbose;
+    std::unique_ptr<IFilesComparatorImpl> m_pimpl;
 };
 
 }
