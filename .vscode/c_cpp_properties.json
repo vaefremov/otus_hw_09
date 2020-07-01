@@ -5,10 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "/Users/efremov/Tmp/GTest/gtest/include",
-                "/Users/efremov/.conan/data/poco/1.9.4/_/_/package/f3f8158a9c9f8a880a0bbe3aa7bb57112429b5b6/include",
                 "/Users/efremov/.conan/data/openssl/1.0.2t/_/_/package/9f67cefb3b597b342ffd9241a4a7dc5a0df50bef/include",
                 "/Users/efremov/.conan/data/zlib/1.2.11/_/_/package/534dcc368c999e07e81f146b3466b8f656ef1f55/include",
-                "/Users/efremov/.conan/data/range-v3/0.9.1/_/_/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include",
                 "/Users/efremov/.conan/data/boost/1.71.0/conan/stable/package/2439fa14ae114198bd340332be9c9f3e28aa8c03/include"
             ],
             "defines": [],
