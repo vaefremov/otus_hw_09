@@ -53,13 +53,13 @@ target_link_libraries(test_scanner
     ${CONAN_LIBS}
 )
 
-add_executable(test_comparator tests/test_comparator.cpp)
-target_include_directories(test_comparator
+add_executable(test_descriptor tests/test_descriptor.cpp)
+target_include_directories(test_descriptor
     PRIVATE 
     "${CMAKE_HOME_DIRECTORY}/include"
     "${GTEST_INCLUDE_DIR}"
 )
-target_link_libraries(test_comparator
+target_link_libraries(test_descriptor
     PRIVATE
     utilities
     ${GTEST_LIBRARIES}
@@ -92,7 +92,7 @@ endif()
 
 enable_testing()
 add_test(test_scanner bin/test_scanner)
-add_test(test_comparator bin/test_comparator)
+add_test(test_descriptor bin/test_descriptor)
 add_test(test_comparator_impl bin/test_comparator_impl)
 
 install(TARGETS ${CMAKE_PROJECT_NAME} RUNTIME DESTINATION bin)
