@@ -1,12 +1,35 @@
 #pragma once
 #include <list>
 #include <fstream>
+#include <boost/crc.hpp>
+#include <boost/uuid/detail/md5.hpp>
+#include <array>
 
 namespace OTUS
 {
 
 template<typename T> T calcChecksum(size_t block_sz, char* buf);
 
+template<>
+unsigned int calcChecksum(size_t block_sz, char* buf)
+{
+    boost::crc_32_type result;
+    result.process_bytes(buf, block_sz);
+    return result.checksum();
+}
+
+using md5digest_t=std::array<unsigned int, 4>;
+
+template<>
+md5digest_t calcChecksum(size_t block_sz, char* buf)
+{
+    boost::uuids::detail::md5 hash;
+    boost::uuids::detail::md5::md5::digest_type digest;
+    hash.process_bytes(buf, block_sz);
+    hash.get_digest(digest);
+    std::array<unsigned int, 4> res{digest[0], digest[1], digest[2], digest[3]};
+    return res;
+}
 template<typename T>
 class FileDescriptor
 {
