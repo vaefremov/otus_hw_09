@@ -12,6 +12,8 @@ branches:
 before_script:
 - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 90
 script:
+- . ~/virtualenv/python3.6/bin/activate
+- pip install conan
 - mkdir gtest
 - cd gtest
 - cmake /usr/src/gtest/
@@ -20,6 +22,7 @@ script:
 - cd ..
 - mkdir build
 - cd build
+- conan install ..
 - cmake  -DCMAKE_BUILD_TYPE=Release ..
 - cmake --build .
 - cmake --build . --target test

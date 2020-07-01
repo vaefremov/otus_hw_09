@@ -3,7 +3,7 @@
 		"name": "${CMAKE_PROJECT_NAME}",
 		"repo": "otus_hw",
 		"subject": "vaefremov",
-		"vcs_url": "https://github.com/vaefremov/otus_hw_07/",
+		"vcs_url": "https://github.com/vaefremov/otus_hw_09/",
 		"licenses": ["BSD"]
 	},
 	"version": {
