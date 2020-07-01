@@ -68,6 +68,21 @@ target_link_libraries(test_comparator
     ${CONAN_LIBS}
 )
 
+add_executable(test_comparator_impl tests/test_comparator_impl.cpp)
+target_include_directories(test_comparator_impl
+    PRIVATE 
+    "${CMAKE_HOME_DIRECTORY}/include"
+    "${GTEST_INCLUDE_DIR}"
+)
+target_link_libraries(test_comparator_impl
+    PRIVATE
+    utilities
+    ${GTEST_LIBRARIES}
+    # ${GTEST_MAIN_LIBRARIES}
+    ${CMAKE_THREAD_LIBS_INIT}
+    ${CONAN_LIBS}
+)
+
 if (MSVC)
   set(WARNINGS_FLAGS /W4)
 else ()
