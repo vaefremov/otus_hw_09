@@ -22,7 +22,7 @@ script:
 - cd ..
 - mkdir build
 - cd build
-- conan install -s compiler.libcxx=libstdc++11 ..
+- conan install -s compiler.libcxx=libstdc++11 -s compiler.version=8 ..
 - cmake  -DCMAKE_BUILD_TYPE=Release ..
 - cmake --build .
 - cmake --build . --target test
