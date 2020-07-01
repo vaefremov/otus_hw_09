@@ -99,9 +99,11 @@ static void delete_test_filesystem()
 }
 
 int main(int argc, char **argv) {
+    // Just in case, better to clean the test filesystem:
+    delete_test_filesystem();
     create_test_filesystem();
     ::testing::InitGoogleTest(&argc, argv);
     auto res = RUN_ALL_TESTS();
-    // delete_test_filesystem();
+    delete_test_filesystem();
     return res;
 }
