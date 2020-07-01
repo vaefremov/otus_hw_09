@@ -125,6 +125,6 @@ int main(int argc, char **argv) {
     create_test_filesystem();
     ::testing::InitGoogleTest(&argc, argv);
     auto res = RUN_ALL_TESTS();
-    // delete_test_filesystem();
+    delete_test_filesystem();
     return res;
 }
