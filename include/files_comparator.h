@@ -23,10 +23,11 @@ class IFilesComparatorImpl
     public:
 
     using Duplicates_t = std::map<std::string, std::list<std::string>>;
-    
+
     virtual ~IFilesComparatorImpl() = default;
     virtual void add(std::string path, size_t fs) = 0;
     virtual Duplicates_t const& duplicates() = 0;
+    virtual void set_verbose(bool verbose=true) = 0;
 };
 
 

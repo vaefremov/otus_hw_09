@@ -30,24 +30,30 @@ class FilesComparatorImpl: public IFilesComparatorImpl
                 }))
         {
             // Found duplicate
-            // std::cout << "Duplicate found! " << path << std::endl;
+            if(m_verbose)
+                std::cout << " Duplicate found: " << path << std::endl;
             m_duplicates[filename_found].emplace_back(std::move(new_fd_ptr->filename()));
         }
         else
         {
-            // std::cout << "Unique file, putting to desctiptors " << path << std::endl;
+            if(m_verbose)
+                std::cout << " Unique file, putting to desctiptors " << path << std::endl;
             m_fs2fds[fs].emplace_back(std::move(new_fd_ptr));
-            // m_duplicates[path] = std::list<std::string>>();
         }
     }
     Duplicates_t const& duplicates() override
     {
         return m_duplicates;
     }
+    void set_verbose(bool verbose=true) override
+    {
+        m_verbose = verbose;
+    }
     private:
     std::map<size_t, std::list<std::unique_ptr<FileDescriptor<T>>>> m_fs2fds;
     std::map<std::string, std::list<std::string>> m_duplicates;
     size_t m_blocksize;
+    bool m_verbose = false;
 };
 
 } // namespace OTUS

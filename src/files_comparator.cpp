@@ -16,6 +16,7 @@ OTUS::FilesComparator::FilesComparator(size_t block_sz, HashKind hash_kind, bool
     default:
         throw   std::invalid_argument("Unknown checksum type");
     }
+    m_pimpl->set_verbose(m_verbose);
 }
 
 
