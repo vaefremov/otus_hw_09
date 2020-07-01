@@ -10,7 +10,9 @@
 #include "scanner.h"
 
 namespace po = boost::program_options;
-size_t const DEFAULT_BLOCK_SZ = 5; // Default block size
+using str_vector=std::vector<std::string>;
+
+size_t const DEFAULT_BLOCK_SZ = 1024UL; // Default block size
 
 std::ostream& operator<<(std::ostream& out, std::vector<std::string> const vect)
 {
@@ -23,6 +25,7 @@ std::ostream& operator<<(std::ostream& out, std::vector<std::string> const vect)
 
 void output_report(std::ostream& out, OTUS::FilesComparator::Report_t const& report)
 {
+    out << "Report: " << report.size() << std::endl;
     for(auto& files_group: report)
     {
         for (auto& f: files_group)
@@ -67,9 +70,10 @@ int main(int argc, const char** argv) {
         std::cout << desc << "\n";
         return EXIT_SUCCESS;
     }
+    bool isVerbose = vm["verbose"].as<bool>();
+    std::cout << "Verbose: " << isVerbose << std::endl;
 
     std::cout << "Max depth: " << vm["depth"].as<size_t>() << std::endl;
-    std::cout << "Verbose: " << vm["verbose"].as<bool>() << std::endl;
     size_t block_sz = vm["block_sz"].as<size_t>();
     std::cout << "Block sz: " << block_sz << std::endl;
 
