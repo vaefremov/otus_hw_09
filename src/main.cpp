@@ -23,9 +23,14 @@ std::ostream& operator<<(std::ostream& out, std::vector<std::string> const vect)
     return out;
 }
 
-void output_report(std::ostream& out, OTUS::FilesComparator::Report_t const& report)
+void output_report(std::ostream& out, OTUS::FilesComparator::Report_t const& report, bool isVerbose=false)
 {
-    out << "Report: " << report.size() << std::endl;
+    if(isVerbose)
+    {
+        out << "=========================================" << std::endl;
+        out << "== Report: total of " << report.size() << " groups of identical files" << std::endl;
+        out << "=========================================" << std::endl;
+    }
     for(auto& files_group: report)
     {
         for (auto& f: files_group)
@@ -41,10 +46,6 @@ std::vector<OTUS::Scanner::fspath> convert_paths(std::vector<std::string> arg)
     std::vector<OTUS::Scanner::fspath> res;
     std::transform(arg.begin(), arg.end(), std::back_inserter(res), [](auto s){return boost::filesystem::path(s);});
     // @TODO: Check if paths are valid!
-    // if(res.empty()) // insert the default path: cwd
-    // {
-    //     res.push_back(boost::filesystem::path("."));
-    // }
     return res;
 }
 
@@ -71,35 +72,47 @@ int main(int argc, const char** argv) {
         return EXIT_SUCCESS;
     }
     bool isVerbose = vm["verbose"].as<bool>();
-    std::cout << "Verbose: " << isVerbose << std::endl;
+    if(isVerbose)
+        std::cout << "Verbose: " << isVerbose << std::endl;
 
-    std::cout << "Max depth: " << vm["depth"].as<size_t>() << std::endl;
+    size_t max_depth = vm["depth"].as<size_t>();
+    if(isVerbose)
+        std::cout << "Max depth: " << vm["depth"].as<size_t>() << std::endl;
+
     size_t block_sz = vm["block_sz"].as<size_t>();
-    std::cout << "Block sz: " << block_sz << std::endl;
+    if(isVerbose)
+        std::cout << "Block sz: " << block_sz << std::endl;
 
-    std::cout << "Paths: " << vm["path"].as<std::vector<std::string>>() << std::endl;
+    str_vector paths{"./"};
+    if(vm.count("path"))
+        paths = vm["path"].as<std::vector<std::string>>();
+    if(isVerbose)
+        std::cout << "Paths: " << paths << std::endl;
 
-    if (vm.count("exclude"))
+    if (vm.count("exclude") && isVerbose)
         std::cout << "Exclude: " << vm["exclude"].as<std::vector<std::string>>() << std::endl;
 
-    if (vm.count("mask"))   
+    if (vm.count("mask") && isVerbose)   
         std::cout << "Masks: " << vm["mask"].as<std::vector<std::string>>() << std::endl;
 
-    std::cout << "Hash: " << vm["hash"].as<std::string>() << std::endl;
+    if(isVerbose)
+        std::cout << "Hash: " << vm["hash"].as<std::string>() << std::endl;
     OTUS::HashKind hash_kind = OTUS::hash_name_from_string(vm["hash"].as<std::string>());
 
-    OTUS::Scanner scanner(convert_paths(vm["path"].as<std::vector<std::string>>()));
+    OTUS::Scanner scanner(convert_paths(paths));
+    scanner.set_verbose(vm["verbose"].as<bool>());
     if(vm.count("exclude"))
         scanner.exclude_paths(convert_paths(vm["exclude"].as<std::vector<std::string>>()));
     if(vm.count("mask"))
         scanner.masks(vm["mask"].as<std::vector<std::string>>());
-    scanner.set_verbose(vm["verbose"].as<bool>());
+    scanner.set_depth(max_depth);
 
-    auto comparator = OTUS::FilesComparator::create_subscribed(scanner, block_sz, hash_kind, vm["verbose"].as<bool>());
+    auto comparator = OTUS::FilesComparator::create_subscribed(scanner, block_sz, hash_kind, isVerbose);
+    
     scanner.run();
 
     OTUS::FilesComparator::Report_t report = comparator->report();
-    output_report(std::cout, report);
+    output_report(std::cout, report, isVerbose);
 
     return EXIT_SUCCESS;
 }
