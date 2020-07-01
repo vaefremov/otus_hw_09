@@ -15,31 +15,39 @@ class FilesComparatorImpl: public IFilesComparatorImpl
 
     void add(std::string path, size_t fs) override
     {
-        auto new_fd_ptr = std::make_unique<FileDescriptor<T>>(m_blocksize, path, fs);
-        auto& candidates = m_fs2fds[fs];
-        std::string filename_found;
-        if(std::any_of(candidates.begin(), candidates.end(), 
-            [&new_fd_ptr, &filename_found](auto& fd_ptr)
-                {   
-                    if(*fd_ptr == *new_fd_ptr)
-                    {
-                        filename_found = fd_ptr->filename();
-                        return true;
-                    }
-                    return false;
-                }))
+        try
         {
-            // Found duplicate
-            if(m_verbose)
-                std::cout << " Duplicate found: " << path << std::endl;
-            m_duplicates[filename_found].emplace_back(std::move(new_fd_ptr->filename()));
+            auto new_fd_ptr = std::make_unique<FileDescriptor<T>>(m_blocksize, path, fs);
+            auto& candidates = m_fs2fds[fs];
+            std::string filename_found;
+            if(std::any_of(candidates.begin(), candidates.end(), 
+                [&new_fd_ptr, &filename_found](auto& fd_ptr)
+                    {   
+                        if(*fd_ptr == *new_fd_ptr)
+                        {
+                            filename_found = fd_ptr->filename();
+                            return true;
+                        }
+                        return false;
+                    }))
+            {
+                // Found duplicate
+                if(m_verbose)
+                    std::cout << " Duplicate found: " << path << std::endl;
+                m_duplicates[filename_found].emplace_back(std::move(new_fd_ptr->filename()));
+            }
+            else
+            {
+                if(m_verbose)
+                    std::cout << " Unique file, putting to desctiptors " << path << std::endl;
+                m_fs2fds[fs].emplace_back(std::move(new_fd_ptr));
+            }
         }
-        else
+        catch(const std::exception& e)
         {
-            if(m_verbose)
-                std::cout << " Unique file, putting to desctiptors " << path << std::endl;
-            m_fs2fds[fs].emplace_back(std::move(new_fd_ptr));
+            std::cerr << e.what() << '\n';
         }
+        
     }
     Duplicates_t const& duplicates() override
     {

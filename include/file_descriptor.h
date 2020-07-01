@@ -4,6 +4,7 @@
 #include <boost/crc.hpp>
 #include <boost/uuid/detail/md5.hpp>
 #include <array>
+#include <exception>
 
 namespace OTUS
 {
@@ -95,6 +96,10 @@ class FileDescriptor
             }
             in.seekg(m_blocksize*m_blocks.size());
             in.read(buf, m_blocksize); // Process read error!
+            if(in.rdstate() && !in.eof())
+            {
+                throw std::runtime_error("Unable to read file: " + m_filename);
+            }
             T csum = calcChecksum<T>(m_blocksize, buf);
             m_blocks.emplace_back(csum);
             return m_blocks.back();
