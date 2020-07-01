@@ -31,15 +31,26 @@ OTUS::HashKind OTUS::hash_name_from_string(std::string hash_name)
 
 void OTUS::FilesComparator::update(Event const& ev)
 {
-    std::cout << event_type_name(ev.m_kind) << std::endl;
+    // std::cout << event_type_name(ev.m_kind) << std::endl;
     if(ev.m_kind == EventKind::REGULAR_FILE)
     {
-        std::cout << ev.m_filesize << " " << ev.m_path << std::endl;
+        // std::cout << ev.m_filesize << " " << ev.m_path << std::endl;
+        m_pimpl->add(ev.m_path.c_str(), ev.m_filesize);
     }
 }
 
 OTUS::FilesComparator::Report_t OTUS::FilesComparator::report() const
 {
-    std::cout << "Report!" << std::endl;;
-    return Report_t{};
+    Report_t res;
+    auto duplicates = m_pimpl->duplicates();
+    for(auto& r: duplicates)
+    {
+        res.emplace_back(std::vector<std::string>{r.first});
+        for (auto& d: r.second)
+        {
+            res.back().emplace_back(d);
+        }
+    }
+
+    return res;
 }
