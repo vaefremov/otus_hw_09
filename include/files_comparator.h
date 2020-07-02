@@ -24,7 +24,7 @@ class IFilesComparatorImpl
 
     virtual ~IFilesComparatorImpl() = default;
     virtual void add_path(std::string path, size_t fs) = 0;
-    virtual Duplicates_t const& duplicates() = 0;
+    virtual Duplicates_t const& duplicates() const = 0;
     virtual void set_verbose(bool verbose=true) = 0;
 };
 

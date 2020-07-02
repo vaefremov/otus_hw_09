@@ -68,7 +68,7 @@ class FileDescriptor
         }
         return !other.hasNextBlock(it_other);
     }
-    std::string const& filename()
+    std::string const& filename() const
     {
         return m_filename;
     }

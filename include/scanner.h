@@ -24,8 +24,8 @@ class Scanner final: public BaseObservable
     void run();
 
     private:
-    bool isFileOK(boost::filesystem::recursive_directory_iterator& it);
-    bool isDirExcluded(boost::filesystem::recursive_directory_iterator& it);
+    bool isFileOK(boost::filesystem::recursive_directory_iterator& it) const;
+    bool isDirExcluded(boost::filesystem::recursive_directory_iterator& it) const;
 
     std::vector<fspath> m_start_paths;
     size_t m_depth = DEF_MAX_DEPTH;

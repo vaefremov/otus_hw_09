@@ -50,7 +50,7 @@ class FilesComparatorImpl: public IFilesComparatorImpl
         }
         
     }
-    Duplicates_t const& duplicates() override
+    Duplicates_t const& duplicates() const override
     {
         return m_duplicates;
     }

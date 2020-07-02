@@ -4,7 +4,7 @@
 
 namespace fs = boost::filesystem;
 
-bool OTUS::Scanner::isFileOK(fs::recursive_directory_iterator& it)
+bool OTUS::Scanner::isFileOK(fs::recursive_directory_iterator& it) const
 {
     if(m_masks.empty())
         return true;
@@ -15,7 +15,7 @@ bool OTUS::Scanner::isFileOK(fs::recursive_directory_iterator& it)
     // return true;
 }
 
-bool OTUS::Scanner::isDirExcluded(fs::recursive_directory_iterator& it)
+bool OTUS::Scanner::isDirExcluded(fs::recursive_directory_iterator& it) const
 {
     if(m_exclude_paths.empty())
         return false;
