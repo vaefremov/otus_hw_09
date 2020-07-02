@@ -8,7 +8,7 @@
 namespace OTUS
 {
 
-size_t const MAX_DEPTH = 1000; // Max depth of recursion
+size_t const DEF_MAX_DEPTH = 1000; // The default max depth of recursion
 
 class Scanner final: public BaseObservable
 {
@@ -28,7 +28,7 @@ class Scanner final: public BaseObservable
     bool isDirExcluded(boost::filesystem::recursive_directory_iterator& it);
 
     std::vector<fspath> m_start_paths;
-    size_t m_depth = MAX_DEPTH;
+    size_t m_depth = DEF_MAX_DEPTH;
     std::vector<fspath> m_exclude_paths;
     std::vector<std::string> m_masks;
     bool m_verbose = false;

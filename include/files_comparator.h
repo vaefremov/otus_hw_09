@@ -6,14 +6,12 @@
 #include "iobserver.h"
 #include "scanner.h"
 
-#include <iostream> // @TODO: remove later
-
 namespace OTUS
 {
 
 enum class HashKind
 {
-    DEFAULT, CRC32, MD5
+    CRC32, MD5
 };
 
 HashKind hash_name_from_string(std::string hash_name);

@@ -31,6 +31,7 @@ md5digest_t calcChecksum(size_t block_sz, char* buf)
     std::array<unsigned int, 4> res{digest[0], digest[1], digest[2], digest[3]};
     return res;
 }
+
 template<typename T>
 class FileDescriptor
 {

@@ -19,7 +19,7 @@ bool OTUS::Scanner::isDirExcluded(fs::recursive_directory_iterator& it)
 {
     if(m_exclude_paths.empty())
         return false;
-    return std::any_of(m_exclude_paths.begin(), m_exclude_paths.end(), [&it](auto p){return it->path() == p;});
+    return std::any_of(m_exclude_paths.begin(), m_exclude_paths.end(), [&it](auto p){std::cout << it->path() << p << std::endl; return it->path() == p;});
 }
 
 void OTUS::Scanner::run()

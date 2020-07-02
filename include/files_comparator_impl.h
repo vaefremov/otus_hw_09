@@ -1,7 +1,8 @@
 #pragma once
-#include <iostream>
 #include "file_descriptor.h"
 #include "files_comparator.h"
+
+#include <iostream> // exception message output to stderr
 
 namespace OTUS
 {
@@ -45,7 +46,7 @@ class FilesComparatorImpl: public IFilesComparatorImpl
         }
         catch(const std::exception& e)
         {
-            std::cerr << e.what() << '\n';
+            std::cerr << "Error while adding path " << path << ": " << e.what() << std::endl;
         }
         
     }

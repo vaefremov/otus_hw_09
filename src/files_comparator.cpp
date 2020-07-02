@@ -1,6 +1,5 @@
 #include "files_comparator_impl.h"
-
-#include <iostream>
+#include <exception>
 
 OTUS::FilesComparator::FilesComparator(size_t block_sz, HashKind hash_kind, bool is_verbose): 
         m_block_sz(block_sz), m_hash_kind(hash_kind), m_verbose(is_verbose) 
@@ -26,16 +25,14 @@ OTUS::HashKind OTUS::hash_name_from_string(std::string hash_name)
         return HashKind::CRC32;
     if (hash_name == "md5")
         return HashKind::MD5;
-    throw std::runtime_error("unsupported hash function!");
+    throw std::invalid_argument("unsupported hash function!");
 }
 
 
 void OTUS::FilesComparator::update(Event const& ev)
 {
-    // std::cout << event_type_name(ev.m_kind) << std::endl;
     if(ev.m_kind == EventKind::REGULAR_FILE)
     {
-        // std::cout << ev.m_filesize << " " << ev.m_path << std::endl;
         m_pimpl->add_path(ev.m_path.c_str(), ev.m_filesize);
     }
 }
