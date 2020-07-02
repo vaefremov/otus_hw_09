@@ -27,10 +27,10 @@ TEST(files_comparator_impl, basic)
     std::stringstream ss;
     size_t blocksize = 4;
     auto fc_crc = OTUS::FilesComparatorImpl<unsigned int>(blocksize);
-    fc_crc.add("sandbox/file1.txt", 16);
-    fc_crc.add("sandbox/a/file2.txt", 16);
-    fc_crc.add("sandbox/file3.txt", 16);
-    fc_crc.add("sandbox/file4.txt", 4);
+    fc_crc.add_path("sandbox/file1.txt", 16);
+    fc_crc.add_path("sandbox/a/file2.txt", 16);
+    fc_crc.add_path("sandbox/file3.txt", 16);
+    fc_crc.add_path("sandbox/file4.txt", 4);
     ss << fc_crc.duplicates();
     std::cout << "Report:\n" << ss.str() << std::endl;
     std::string exp("sandbox/file1.txt: sandbox/a/file2.txt\n");

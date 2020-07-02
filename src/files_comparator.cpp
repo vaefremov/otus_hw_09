@@ -36,7 +36,7 @@ void OTUS::FilesComparator::update(Event const& ev)
     if(ev.m_kind == EventKind::REGULAR_FILE)
     {
         // std::cout << ev.m_filesize << " " << ev.m_path << std::endl;
-        m_pimpl->add(ev.m_path.c_str(), ev.m_filesize);
+        m_pimpl->add_path(ev.m_path.c_str(), ev.m_filesize);
     }
 }
 

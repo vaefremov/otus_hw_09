@@ -13,7 +13,7 @@ class FilesComparatorImpl: public IFilesComparatorImpl
     
     explicit FilesComparatorImpl(size_t blocksize): m_blocksize(blocksize) {}
 
-    void add(std::string path, size_t fs) override
+    void add_path(std::string path, size_t fs) override
     {
         try
         {
