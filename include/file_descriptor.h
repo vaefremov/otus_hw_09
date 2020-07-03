@@ -40,10 +40,7 @@ class FileDescriptor
     using BlockListIterator_t = typename std::list<T>::iterator;
 
     FileDescriptor(size_t blocksize, std::string path, size_t size): m_filename(std::move(path)), m_size(size), m_blocksize(blocksize){}
-    bool isComplete() const 
-    {
-        return m_blocks.size() * m_blocksize >= m_size;
-    }
+
     bool operator==(FileDescriptor<T>& other)
     {
         if(m_size != other.m_size)
@@ -68,6 +65,7 @@ class FileDescriptor
         }
         return !other.hasNextBlock(it_other);
     }
+
     std::string const& filename() const
     {
         return m_filename;
@@ -80,10 +78,16 @@ class FileDescriptor
 
     private:
 
+    bool isComplete() const 
+    {
+        return m_blocks.size() * m_blocksize >= m_size;
+    }
+
     bool hasNextBlock(BlockListIterator_t& it) const
     {
         return (it != m_blocks.end()) || !isComplete();
     }
+    
     T& nextBlock(BlockListIterator_t& it, std::ifstream& in)
     {
         if(it == m_blocks.end() && !isComplete())
