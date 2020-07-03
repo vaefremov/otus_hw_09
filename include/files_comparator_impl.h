@@ -19,7 +19,7 @@ class FilesComparatorImpl: public IFilesComparatorImpl
         try
         {
             auto new_fd_ptr = std::make_unique<FileDescriptor<T>>(m_blocksize, path, fs);
-            auto& candidates = m_fs2fds[fs];
+            auto& candidates = m_filesz2fdescriptors[fs];
             std::string filename_found;
             if(std::any_of(candidates.begin(), candidates.end(), 
                 [&new_fd_ptr, &filename_found](auto& fd_ptr)
@@ -41,7 +41,7 @@ class FilesComparatorImpl: public IFilesComparatorImpl
             {
                 if(m_verbose)
                     std::cout << " Unique file, putting to desctiptors " << path << std::endl;
-                m_fs2fds[fs].emplace_back(std::move(new_fd_ptr));
+                m_filesz2fdescriptors[fs].emplace_back(std::move(new_fd_ptr));
             }
         }
         catch(const std::exception& e)
@@ -59,7 +59,11 @@ class FilesComparatorImpl: public IFilesComparatorImpl
         m_verbose = verbose;
     }
     private:
-    std::map<size_t, std::list<std::unique_ptr<FileDescriptor<T>>>> m_fs2fds;
+    /**
+     * Data structure keeping correspondence file-size -> list of file descriptors
+     * (i.e. chain of checksums of blocks comprizing the file).
+     */
+    std::map<size_t, std::list<std::unique_ptr<FileDescriptor<T>>>> m_filesz2fdescriptors;
     std::map<std::string, std::list<std::string>> m_duplicates;
     size_t m_blocksize;
     bool m_verbose = false;
