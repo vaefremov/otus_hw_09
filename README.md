@@ -1,5 +1,5 @@
-# otus_hw_09
-OTUS homework #9. Utility to find the identical files across the specified set of directories.
+# bayan
+Utility to find the identical files across the specified set of directories. It's OTUS homework #9. 
 
 Status of tests in CI servers:
 
