@@ -31,9 +31,14 @@ OTUS::HashKind OTUS::hash_name_from_string(std::string hash_name)
 
 void OTUS::FilesComparator::update(Event const& ev)
 {
-    if(ev.m_kind == EventKind::REGULAR_FILE)
+    switch (ev.kind)
     {
-        m_pimpl->add_path(ev.m_path.c_str(), ev.m_filesize);
+    case EventKind::REGULAR_FILE:
+        m_pimpl->add_path(ev.path.c_str(), ev.filesize);
+        break;
+    
+    default: // The END_STREAM event ignored
+        break;
     }
 }
 

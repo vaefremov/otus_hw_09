@@ -15,9 +15,9 @@ enum class EventKind
 
 struct Event
 {
-    EventKind m_kind;
-    size_t m_filesize;
-    boost::filesystem::path m_path;
+    EventKind kind;
+    size_t filesize;
+    boost::filesystem::path path;
 };
 
 constexpr char const* event_type_name(EventKind t)
